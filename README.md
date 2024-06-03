@@ -14,5 +14,6 @@ Contains notebooks for 2023 to run RNASeq data analysis:
 - Pipe_08-R403_counts-exploratory-analysis-I.ipynb
 - Pipe_09-R403-DESeq2-normalisation-DE.ipynb
 - Pipe_10-R403-Normcounts-exploratory-analysis-II.ipynb
+- Pipe_11-R403-ORA-GSEA.ipynb
 
-Pipe_11 to come....
+
