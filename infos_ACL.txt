@@ -1,0 +1,34 @@
+### Pour les droits  le owner (Claire) du projet peut changer les acls .
+### Les commandes sont  les suivantes (je les ai déjà passées) :
+
+## Vous deux êtes les seules à faire partie du groupe  2413_rnaseq_cea_alldata
+
+# répertoires de chaque enseignant : vous avez rwx sur vos répertoires, mais les autres n’ont pas de droit (---)
+setfacl -R -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/scaburet
+setfacl -R -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/cvandiedonck
+setfacl -R -m group:2413_rnaseq_cea:--- /shared/projects/2413_rnaseq_cea/scaburet
+setfacl -R -m group:2413_rnaseq_cea:--- /shared/projects/2413_rnaseq_cea/cvandiedonck
+
+# répertoires de chaque enseignant  : changer le default (-d)
+setfacl -R -d -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/scaburet
+setfacl -R -d -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/cvandiedonck
+setfacl -R -d -m group:2413_rnaseq_cea:--- /shared/projects/2413_rnaseq_cea/scaburet
+setfacl -R -d -m  group:2413_rnaseq_cea:--- /shared/projects/2413_rnaseq_cea/cvandiedonck
+
+# vous êtes les seules à avoir les droits rwx sur pipeline
+setfacl -R -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/pipeline
+setfacl -R -d -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/pipeline
+
+# vous êtes les seules à avoir les droits rwx sur staff
+setfacl -R -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/staff
+setfacl -R -d -m group:2413_rnaseq_cea_alldata:rwx /shared/projects/2413_rnaseq_cea/staff
+
+# les autres membres du projet ne peuvent pas lire staff
+setfacl  -R -m group:2413_rnaseq_cea:--- /shared/projects/2413_rnaseq_cea/staff
+setfacl  -R -d -m group:2413_rnaseq_cea:--- /shared/projects/2413_rnaseq_cea/staff
+
+# les autres membres du projet ont r-x sur pipeline
+setfacl  -R -m group:2413_rnaseq_cea:r-x /shared/projects/2413_rnaseq_cea/pipeline
+setfacl  -R -d -m group:2413_rnaseq_cea:r-x /shared/projects/2413_rnaseq_cea/pipeline
+
+## Par contre c’est  assez compliqué de ne donner aucun droit pour les autres apprenants sur  le répertoire de chaque apprenant .
