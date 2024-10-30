@@ -5,3 +5,6 @@ This repository contains adapted Jupyter notebooks for RNAseq bioinformatic anal
 
 1. Bash analysis pipeline (Pipe00b to Pipe_06 notebook)
 2. R analysis pipeline (Pipe_08 to Pipe_11 notebook)
+
+## Development Workflow
+This repository uses a feature branch workflow. Please create a new branch for each feature or bugfix.
