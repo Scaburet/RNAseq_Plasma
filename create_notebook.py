@@ -19,6 +19,13 @@ This notebook covers the essential steps of RNA-seq data analysis including:
 <b>Resource Requirements:</b><br>
 - CPUs: 10
 - RAM: 6GB
+</div>
+
+<div class="alert alert-success">
+<b>Data Locations:</b><br>
+- Raw Data: <code>/srv/data/meg-m2-rnaseq/Data/fastq/raw/</code>
+- Genome Annotation: <code>/srv/data/meg-m2-rnaseq/Genomes/Mmu/GRCm39/extracted/mouse genome_annotation-M35.gtf</code>
+- Fastp Results: <code>/srv/data/meg-m2-rnaseq/Results/fastp/</code>
 </div>"""
 
 # Environment setup
@@ -35,7 +42,7 @@ The required tools are pre-installed in the Plasmabio environment:
 
 # Create directories
 setup_code = """# Cell 1: Create working directories
-mkdir -p ~/rnaseq/results/{fastqc,fastp,star}
+mkdir -p ~/rnaseq/results/{fastqc,star}
 cd ~/rnaseq"""
 
 # Quality assessment
@@ -43,13 +50,13 @@ qc_md = """## 2. Raw Data Quality Assessment
 
 <div class="alert alert-info">
 We'll first examine the quality of raw sequencing data using FastQC.
-The raw data is located in: <code>/srv/data/meg-m2-rnaseq/Data/fastq/raw/</code>
+We'll start by analyzing the first two samples, then provide commands for processing all samples.
 </div>"""
 
 fastqc_code = """# Cell 2: Run FastQC on first two samples
 cd ~/rnaseq
 fastqc -o results/fastqc -t 10 \\
-  /srv/data/meg-m2-rnaseq/Data/fastq/raw/*_R{1,2}.fastq.gz"""
+  $(ls /srv/data/meg-m2-rnaseq/Data/fastq/raw/*_R{1,2}.fastq.gz | head -n 4)"""
 
 fastqc_all_code = """# (Cell 3): Command to run FastQC on all samples
 cd ~/rnaseq
@@ -64,19 +71,23 @@ We use fastp to:
 - Trim low quality bases
 - Remove adapter sequences
 - Filter out poor quality reads
+
+<b>Note:</b> Pre-processed results for all samples are available in:
+<code>/srv/data/meg-m2-rnaseq/Results/fastp/</code>
 </div>"""
 
 fastp_code = """# Cell 4: Process first two samples with fastp
 cd ~/rnaseq
 for sample in $(ls /srv/data/meg-m2-rnaseq/Data/fastq/raw/*_R1.fastq.gz | head -n 2); do
     base=$(basename $sample _R1.fastq.gz)
+    echo "Processing $base..."
     fastp \\
         -i ${sample} \\
         -I ${sample%_R1.fastq.gz}_R2.fastq.gz \\
-        -o results/fastp/${base}_R1_cleaned.fastq.gz \\
-        -O results/fastp/${base}_R2_cleaned.fastq.gz \\
-        --html results/fastp/${base}_report.html \\
-        --json results/fastp/${base}_report.json \\
+        -o /srv/data/meg-m2-rnaseq/Results/fastp/${base}_R1_cleaned.fastq.gz \\
+        -O /srv/data/meg-m2-rnaseq/Results/fastp/${base}_R2_cleaned.fastq.gz \\
+        --html /srv/data/meg-m2-rnaseq/Results/fastp/${base}_report.html \\
+        --json /srv/data/meg-m2-rnaseq/Results/fastp/${base}_report.json \\
         --thread 10
 done"""
 
@@ -84,13 +95,14 @@ fastp_all_code = """# (Cell 5): Command to process all samples with fastp
 cd ~/rnaseq
 for sample in /srv/data/meg-m2-rnaseq/Data/fastq/raw/*_R1.fastq.gz; do
     base=$(basename $sample _R1.fastq.gz)
+    echo "Processing $base..."
     fastp \\
         -i ${sample} \\
         -I ${sample%_R1.fastq.gz}_R2.fastq.gz \\
-        -o results/fastp/${base}_R1_cleaned.fastq.gz \\
-        -O results/fastp/${base}_R2_cleaned.fastq.gz \\
-        --html results/fastp/${base}_report.html \\
-        --json results/fastp/${base}_report.json \\
+        -o /srv/data/meg-m2-rnaseq/Results/fastp/${base}_R1_cleaned.fastq.gz \\
+        -O /srv/data/meg-m2-rnaseq/Results/fastp/${base}_R2_cleaned.fastq.gz \\
+        --html /srv/data/meg-m2-rnaseq/Results/fastp/${base}_report.html \\
+        --json /srv/data/meg-m2-rnaseq/Results/fastp/${base}_report.json \\
         --thread 10
 done"""
 
@@ -99,26 +111,32 @@ postqc_md = """## 4. Post-processing Quality Check
 
 <div class="alert alert-info">
 We'll run FastQC on the cleaned reads and generate a MultiQC report combining all quality metrics.
+We'll use the pre-processed fastp results available in: <code>/srv/data/meg-m2-rnaseq/Results/fastp/</code>
 </div>"""
 
 postqc_code = """# Cell 6: Run FastQC on cleaned reads (first two samples)
 cd ~/rnaseq
 fastqc -o results/fastqc -t 10 \\
-  results/fastp/*_cleaned.fastq.gz"""
+  $(ls /srv/data/meg-m2-rnaseq/Results/fastp/*_cleaned.fastq.gz | head -n 4)"""
 
-multiqc_code = """# Cell 7: Generate MultiQC report
+multiqc_code = """# Cell 7: Generate MultiQC report for all samples
 cd ~/rnaseq
-multiqc -o results/multiqc results/fastqc results/fastp"""
+# Create symbolic link to fastp results
+ln -sf /srv/data/meg-m2-rnaseq/Results/fastp .
+# Generate report including all samples
+multiqc -o results/multiqc \\
+  results/fastqc \\
+  /srv/data/meg-m2-rnaseq/Results/fastp"""
 
 # Read mapping
 mapping_md = """## 5. Read Mapping
 
 <div class="alert alert-info">
 We'll map the cleaned reads to the mouse reference genome using STAR.
+We'll demonstrate the mapping process on the first two samples.
 The genome annotation file is located at:
 <code>/srv/data/meg-m2-rnaseq/Genomes/Mmu/GRCm39/extracted/mouse genome_annotation-M35.gtf</code>
 </div>"""
-
 
 genome_prep_code = """# (Cell 8): Download and prepare reference genome
 cd ~/rnaseq
@@ -137,8 +155,9 @@ STAR --runMode genomeGenerate \\
 
 mapping_code = """# Cell 10: Map reads for first two samples
 cd ~/rnaseq
-for sample in $(ls results/fastp/*_R1_cleaned.fastq.gz | head -n 2); do
+for sample in $(ls /srv/data/meg-m2-rnaseq/Results/fastp/*_R1_cleaned.fastq.gz | head -n 2); do
     base=$(basename $sample _R1_cleaned.fastq.gz)
+    echo "Mapping $base..."
     STAR --genomeDir reference/star_index \\
          --readFilesIn ${sample} ${sample%_R1_cleaned.fastq.gz}_R2_cleaned.fastq.gz \\
          --readFilesCommand zcat \\
@@ -148,9 +167,11 @@ for sample in $(ls results/fastp/*_R1_cleaned.fastq.gz | head -n 2); do
 done"""
 
 mapping_all_code = """# (Cell 11): Command to map all samples
+# Note: For the course, we'll provide pre-mapped BAM files for the remaining samples
 cd ~/rnaseq
-for sample in results/fastp/*_R1_cleaned.fastq.gz; do
+for sample in /srv/data/meg-m2-rnaseq/Results/fastp/*_R1_cleaned.fastq.gz; do
     base=$(basename $sample _R1_cleaned.fastq.gz)
+    echo "Mapping $base..."
     STAR --genomeDir reference/star_index \\
          --readFilesIn ${sample} ${sample%_R1_cleaned.fastq.gz}_R2_cleaned.fastq.gz \\
          --readFilesCommand zcat \\
