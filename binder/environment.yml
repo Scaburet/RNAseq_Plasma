@@ -1,15 +1,12 @@
 name: meg_m2_rnaseq_bash_2024
 # 2024_test for an updated environment for the novel RNAseq pipeline on mouse data (adapted from the CEA RNAseq course)
-
 # channels priority
 # see https://bioconda.github.io/
 # conda-forge has highest priority
-
 channels:
   - defaults
   - bioconda
   - conda-forge
-
 dependencies:
   # Jupyter dependencies
   - jupyterhub>=1.5,<2
@@ -37,7 +34,6 @@ dependencies:
   - qualimap=2.2.2b
   - subread=2.0.6
   - salmon=1.10.2
-  
   #- pip:
   #  - jupyter
   #  - notebook
