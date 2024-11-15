@@ -1,6 +1,6 @@
-import nbformat
+import nbformat as nbf
 from nbformat.v4 import new_notebook, new_markdown_cell, new_code_cell
-import json
+import os, json
 
 def create_genome_indexing_cells():
     """Create cells for genome downloading and indexing section"""
@@ -57,7 +57,8 @@ The mouse reference genome and its annotation are fundamental for RNA-seq analys
     cells.append(new_markdown_cell(doc_md))
 
     # Add genome download code
-    download_code = """# Download and prepare reference genome
+    download_code = """%%bash
+# Download and prepare reference genome
 echo "Creating reference directories..."
 mkdir -p reference/star_index
 
@@ -79,7 +80,7 @@ ls -lh star_index/
 echo "Index generation complete."
 cd ..
 """
-    cells.append(new_code_cell(download_code))
+    cells.append(new_code_cell(download_code, metadata={"tags": ["bash"]}))
     return cells
 
 def create_quality_check_cells():
@@ -139,7 +140,8 @@ FastQC performs quality control checks on raw sequence data. Understanding these
     cells.append(new_markdown_cell(doc_md))
 
     # Add FastQC code
-    fastqc_code = """# Run FastQC on first two samples
+    fastqc_code = """%%bash
+# Run FastQC on first two samples
 echo "Creating FastQC output directory..."
 mkdir -p Results/fastqc
 
@@ -159,7 +161,7 @@ ls -lh Results/fastqc/
 echo "Running FastQC on all samples..."
 fastqc -o Results/fastqc -t 10 ${DATA_DIR}/*.fastq.gz
 '"""
-    cells.append(new_code_cell(fastqc_code))
+    cells.append(new_code_cell(fastqc_code, metadata={"tags": ["bash"]}))
     return cells
 
 def create_preprocessing_cells():
@@ -235,7 +237,8 @@ fastp performs quality control and preprocessing of sequencing reads. This step 
     cells.append(new_markdown_cell(doc_md))
 
     # Add fastp code
-    fastp_code = """# Process first two samples with fastp
+    fastp_code = """%%bash
+# Process first two samples with fastp
 echo "Creating fastp output directory..."
 mkdir -p Results/fastp
 
@@ -289,7 +292,7 @@ for sample in sample*; do
           --cut_mean_quality 20
 done
 '"""
-    cells.append(new_code_cell(fastp_code))
+    cells.append(new_code_cell(fastp_code, metadata={"tags": ["bash"]}))
     return cells
 
 def create_mapping_cells():
@@ -363,7 +366,8 @@ STAR (Spliced Transcripts Alignment to a Reference) is designed specifically for
     cells.append(new_markdown_cell(doc_md))
 
     # Add mapping code
-    mapping_code = """# Map first two samples with STAR
+    mapping_code = """%%bash
+# Map first two samples with STAR
 echo "Creating STAR output directory..."
 mkdir -p Results/star
 
@@ -414,7 +418,7 @@ for sample in sample*; do
     samtools index Results/star/${sample}/Aligned.sortedByCoord.out.bam
 done
 '"""
-    cells.append(new_code_cell(mapping_code))
+    cells.append(new_code_cell(mapping_code, metadata={"tags": ["bash"]}))
     return cells
 
 def create_multiqc_cells():
@@ -485,7 +489,8 @@ MultiQC aggregates quality control reports from multiple bioinformatics tools in
     cells.append(new_markdown_cell(doc_md))
 
     # Add MultiQC code
-    multiqc_code = """# Run MultiQC on all results
+    multiqc_code = """%%bash
+# Run MultiQC on all results
 echo "Creating MultiQC output directory..."
 mkdir -p Results/multiqc
 
@@ -514,7 +519,7 @@ echo "STAR logs:"
 ls -l Results/star/*/Log.final.out
 echo "------------------------"
 """
-    cells.append(new_code_cell(multiqc_code))
+    cells.append(new_code_cell(multiqc_code, metadata={"tags": ["bash"]}))
     return cells
 
 # Create new notebook
@@ -560,7 +565,7 @@ This pipeline processes paired-end RNA-seq data from mouse samples. We will:
 detailed_nb.cells.append(new_markdown_cell(title_md))
 
 # Add setup code
-setup_code = """#!/bin/bash
+setup_code = """%%bash
 # Create Results directory structure
 mkdir -p Results/{fastqc,fastp,star,multiqc}
 
@@ -577,4 +582,4 @@ detailed_nb.cells.extend(create_multiqc_cells())
 
 # Save the new notebook
 with open('detailed_notebook.ipynb', 'w') as f:
-    nbformat.write(detailed_nb, f)
+    nbf.write(detailed_nb, f)
