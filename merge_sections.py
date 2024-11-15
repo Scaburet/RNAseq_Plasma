@@ -29,10 +29,12 @@ def extract_sections(notebook_file, sections):
             # Check if this cell starts a new section
             for section in sections:
                 # More flexible section matching
-                section_pattern = section.replace(" - ", "[ -]+").replace(".", r"\.")
+                section_pattern = section.replace(" - ", "[ -]+").replace(".", r"\.").replace("featuresCounts", r"(?:<code>)?featuresCounts(?:</code>)?")
                 if (section in cell.source or
                     re.search(rf"#+ *{re.escape(section)}", cell.source, re.IGNORECASE) or
-                    re.search(rf"#+ *{section_pattern}", cell.source, re.IGNORECASE)):
+                    re.search(rf"#+ *{section_pattern}", cell.source, re.IGNORECASE) or
+                    # Handle HTML-formatted headers
+                    re.search(rf"#+ *{section.replace('featuresCounts', '<code>featuresCounts</code>')}", cell.source, re.IGNORECASE)):
                     print(f"\nFound section: {section}")
                     if current_section and section_content:
                         extracted_cells.extend(section_content)
