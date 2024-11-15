@@ -1,0 +1,26 @@
+Notebooks to Analyze for R Programs and Libraries:
+
+[ ] Pipe_08
+    Programs:
+    Libraries:
+    Notes:
+
+[ ] Pipe_09
+    Programs:
+    Libraries:
+    Notes:
+
+[ ] Pipe_10
+    Programs:
+    Libraries:
+    Notes:
+
+[ ] Pipe_11
+    Programs:
+    Libraries:
+    Notes:
+
+Requirements:
+- Compatible with R version 4.1.3 (2022-03-10)
+- For use on Plasmabio server
+- Focus on second part of analysis in R
