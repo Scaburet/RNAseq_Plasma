@@ -9,22 +9,38 @@ def extract_sections(notebook_file, sections):
     extracted_cells = []
     current_section = None
     section_content = []
+    in_section = False
 
     for cell in nb.cells:
         if cell.cell_type == 'markdown':
+            found_new_section = False
             # Check if this cell starts a new section
             for section in sections:
-                if section in cell.source or re.search(rf"#+ *{re.escape(section)}", cell.source, re.IGNORECASE):
+                # More flexible section matching
+                section_pattern = section.replace(" - ", "[ -]+").replace(".", r"\.")
+                if (section in cell.source or
+                    re.search(rf"#+ *{re.escape(section)}", cell.source, re.IGNORECASE) or
+                    re.search(rf"#+ *{section_pattern}", cell.source, re.IGNORECASE)):
                     if current_section and section_content:
                         extracted_cells.extend(section_content)
                     current_section = section
                     section_content = [cell]
+                    in_section = True
+                    found_new_section = True
                     break
-        elif current_section:
+
+            # Only check for section end if we didn't just start a new section
+            if not found_new_section and in_section and re.match(r'^#+\s+\d+[\.-]', cell.source):
+                if current_section and section_content:
+                    extracted_cells.extend(section_content)
+                    current_section = None
+                    section_content = []
+                    in_section = False
+        elif in_section:
             section_content.append(cell)
 
     # Add the last section if it exists
-    if section_content:
+    if current_section and section_content:
         extracted_cells.extend(section_content)
 
     return extracted_cells
@@ -45,7 +61,15 @@ def merge_sections(target_file, pipe06_file):
     # Extract sections from Pipe_06
     pipe06_cells = extract_sections(pipe06_file, required_sections)
 
-    # Find insertion point (end of notebook)
+    if not pipe06_cells:
+        print("Warning: No sections were extracted. Check section names and source file.")
+        return
+
+    # Add a markdown cell to separate the merged content
+    separator_cell = nbformat.v4.new_markdown_cell(source="\n## Merged Sections from Pipe_06\n")
+    target_nb.cells.append(separator_cell)
+
+    # Add extracted cells
     target_nb.cells.extend(pipe06_cells)
 
     # Save modified notebook
