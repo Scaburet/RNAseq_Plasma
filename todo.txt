@@ -64,10 +64,27 @@ Notebooks to Analyze for R Programs and Libraries:
     - Uses tidyverse for data manipulation
     - Version compatibility critical for Bioconductor packages
 
-[ ] Pipe_10
+[x] Pipe_10
     Programs:
+    - R (>= 4.1.3)
     Libraries:
+    - ggfortify
+    - ggrepel
+    - RColorBrewer
+    - stringr
+    - matrixStats
+    - corrplot
+    - BiocManager
+    - FactoMineR
+    - factoextra
+    - DESeq2 (Bioconductor)
+    - ComplexHeatmap (Bioconductor)
     Notes:
+    - Advanced visualization and exploratory analysis
+    - Uses multiple visualization packages
+    - Requires both CRAN and Bioconductor packages
+    - Includes dimensionality reduction (FactoMineR)
+    - Complex visualization with heatmaps
 
 [ ] Pipe_11
     Programs:
