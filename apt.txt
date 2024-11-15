@@ -1,6 +1,0 @@
-vim
-nano
-gawk
-tree
-htop
-bc
