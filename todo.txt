@@ -46,10 +46,23 @@ Notebooks to Analyze for R Programs and Libraries:
     - Needs BiocManager for Bioconductor package management
     - Version compatibility check needed for Bioconductor packages
 
-[ ] Pipe_09
+[x] Pipe_09
     Programs:
+    - R (>= 4.1.3)
     Libraries:
+    - tidyverse
+    - magrittr
+    - matrixStats
+    - BiocManager
+    - ggplot2
+    - DESeq2 (Bioconductor)
+    - vsn (Bioconductor)
     Notes:
+    - Heavy dependency on Bioconductor packages
+    - DESeq2 required for differential expression analysis
+    - vsn needed for variance stabilizing transformation
+    - Uses tidyverse for data manipulation
+    - Version compatibility critical for Bioconductor packages
 
 [ ] Pipe_10
     Programs:
