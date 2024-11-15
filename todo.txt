@@ -27,10 +27,24 @@ Notebooks to Analyze for R Programs and Libraries:
     - Compatible with R 4.1.3 (uses standard graphics package)
     - Includes statistical visualization (qqplot, density plots)
 
-[ ] Pipe_08
+[x] Pipe_08
     Programs:
+    - R (>= 4.1.3)
     Libraries:
+    - tidyverse
+    - data.table
+    - ggfortify
+    - ggrepel
+    - RColorBrewer
+    - matrixStats
+    - BiocManager
+    - affy (Bioconductor)
     Notes:
+    - Requires both CRAN and Bioconductor packages
+    - Uses tidyverse for data manipulation
+    - Includes advanced visualization with ggplot2 extensions
+    - Needs BiocManager for Bioconductor package management
+    - Version compatibility check needed for Bioconductor packages
 
 [ ] Pipe_09
     Programs:
