@@ -58,7 +58,11 @@ def verify_improvements(notebook_file):
 
         # Check code cells for technical features
         elif cell.cell_type == 'code':
-            if 'try:' in cell.source and 'except:' in cell.source:
+            # Check for error handling with specific exceptions
+            if ('try:' in cell.source and
+                ('except FileNotFoundError' in cell.source or
+                 'except Exception' in cell.source or
+                 'except:' in cell.source)):
                 requirements['error_handling'] = True
 
             if 'validate' in cell_content or 'check' in cell_content:
