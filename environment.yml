@@ -1,0 +1,23 @@
+name: meg_m2_rnaseq_bash
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - bash_kernel
+  - fastqc=0.12.1
+  - multiqc=1.13
+  - fastp=0.23.1
+  - fastq-screen=0.15.3
+  - star=2.7.11a
+  - samtools=1.18
+  - bc=1.07.1
+  - qualimap=2.2.2b
+  - subread=2.0.6
+  - salmon=1.10.2
+  - pip:
+    - jupyter
+    - notebook
+    - nbconvert

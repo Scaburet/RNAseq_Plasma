@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Install bash kernel for Jupyter
+python -m bash_kernel.install --sys-prefix
