@@ -8,11 +8,4 @@ mkdir -p ~/R/x86_64-conda-linux-gnu-library/4.1
 echo "R_LIBS_USER='~/R/x86_64-conda-linux-gnu-library/4.1'" >> ~/.Renviron
 
 # Install additional R packages that might be needed
-R --quiet -e "install.packages(c('tidyverse', 'magrittr', 'matrixStats', 'ggplot2', 'ggfortify', 'ggrepel', 'RColorBrewer', 'stringr', 'corrplot', 'FactoMineR', 'factoextra', 'ggnewscale', 'WGCNA', 'flashClust', 'data.table'), repos='https://cloud.r-project.org', quiet=TRUE)"
-
-# Install Bioconductor packages
-R --quiet -e "if (!require('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos='https://cloud.r-project.org', quiet=TRUE)"
-R --quiet -e "BiocManager::install(c('DESeq2', 'vsn', 'affy', 'ComplexHeatmap', 'org.Mm.eg.db', 'clusterProfiler', 'enrichplot', 'ReactomePA'), update=FALSE, ask=FALSE)"
-
-# Make postBuild executable
-chmod +x postBuild
+R --quiet -e "options(repos = c(CRAN = 'https://cloud.r-project.org')); if (!require('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install(version = '3.14', ask = FALSE); pkgs <- c('tidyverse', 'magrittr', 'matrixStats', 'ggplot2', 'ggfortify', 'ggrepel', 'RColorBrewer', 'stringr', 'corrplot', 'FactoMineR', 'factoextra', 'ggnewscale', 'WGCNA', 'flashClust', 'data.table'); for(pkg in pkgs) if (!require(pkg, character.only = TRUE)) install.packages(pkg); BiocManager::install(c('DESeq2', 'vsn', 'affy', 'ComplexHeatmap', 'org.Mm.eg.db', 'clusterProfiler', 'enrichplot', 'ReactomePA'), update = FALSE, ask = FALSE)"
