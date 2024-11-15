@@ -1,0 +1,44 @@
+name: meg_m2_rnaseq_bash_2024
+# 2024_test for an updated environment for the novel RNAseq pipeline on mouse data (adapted from the CEA RNAseq course)
+
+# channels priority
+# see https://bioconda.github.io/
+# conda-forge has highest priority
+
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+
+dependencies:
+  # Jupyter dependencies
+  - jupyterhub>=1.5,<2
+  - jupyterlab>=3.2,<4
+  - jupyter-resource-usage
+  - jupyterlab-topbar
+  - jupyterlab-topbar-text
+  - jupyterlab-system-monitor
+  - nodejs
+  # Jupyter archive
+  # https://github.com/jupyterlab-contrib/jupyter-archive
+  - jupyter-archive
+  # Bash environment
+  - python=3.9
+  - pip
+  - bash_kernel
+   # For the M2 course:
+  - fastqc=0.12.1
+  - multiqc=1.13
+  - fastp=0.23.1
+  - fastq-screen=0.15.3
+  - star=2.7.11a
+  - samtools=1.18
+  - bc=1.07.1
+  - qualimap=2.2.2b
+  - subread=2.0.6
+  - salmon=1.10.2
+  
+  #- pip:
+  #  - jupyter
+  #  - notebook
+  #  - nbconvert
