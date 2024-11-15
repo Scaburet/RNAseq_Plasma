@@ -1,0 +1,11 @@
+libxml2-dev
+libcurl4-openssl-dev
+libssl-dev
+libpng-dev
+libjpeg-dev
+libcairo2-dev
+libxt-dev
+libgtk2.0-dev
+xvfb
+xauth
+libglpk-dev

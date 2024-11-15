@@ -1,0 +1,31 @@
+name: meg-m2-rnaseq-r
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base=4.1.3
+  - r-tidyverse
+  - r-magrittr
+  - r-matrixstats
+  - r-ggplot2
+  - r-ggfortify
+  - r-ggrepel
+  - r-rcolorbrewer
+  - r-stringr
+  - r-corrplot
+  - r-factominer
+  - r-factoextra
+  - r-ggnewscale
+  - r-wgcna
+  - r-flashclust
+  - r-data.table
+  - bioconductor-biocmanager
+  - bioconductor-deseq2
+  - bioconductor-vsn
+  - bioconductor-affy
+  - bioconductor-complexheatmap
+  - bioconductor-org.mm.eg.db
+  - bioconductor-clusterprofiler
+  - bioconductor-enrichplot
+  - bioconductor-reactomepa

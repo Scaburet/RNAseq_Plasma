@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+# Create R library directory
+mkdir -p ~/R/x86_64-conda-linux-gnu-library/4.1
+
+# Add the directory to R library paths
+echo "R_LIBS_USER='~/R/x86_64-conda-linux-gnu-library/4.1'" >> ~/.Renviron
+
+# Install additional R packages that might be needed
+R --quiet -e "install.packages(c('tidyverse', 'magrittr', 'matrixStats', 'ggplot2', 'ggfortify', 'ggrepel', 'RColorBrewer', 'stringr', 'corrplot', 'FactoMineR', 'factoextra', 'ggnewscale', 'WGCNA', 'flashClust', 'data.table'), repos='https://cloud.r-project.org', quiet=TRUE)"
+
+# Install Bioconductor packages
+R --quiet -e "if (!require('BiocManager', quietly = TRUE)) install.packages('BiocManager', repos='https://cloud.r-project.org', quiet=TRUE)"
+R --quiet -e "BiocManager::install(c('DESeq2', 'vsn', 'affy', 'ComplexHeatmap', 'org.Mm.eg.db', 'clusterProfiler', 'enrichplot', 'ReactomePA'), update=FALSE, ask=FALSE)"
+
+# Make postBuild executable
+chmod +x postBuild
