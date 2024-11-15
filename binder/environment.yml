@@ -20,9 +20,10 @@ dependencies:
   # https://github.com/jupyterlab-contrib/jupyter-archive
   - jupyter-archive
   # Bash environment
-  - python=3.9
+  - python>=3.8
   - pip
-  - bash_kernel
+  - pip:
+    - bash_kernel
    # For the M2 course:
   - fastqc=0.12.1
   - multiqc=1.13
