@@ -3,6 +3,7 @@ import re
 
 def extract_sections(notebook_file, sections):
     """Extract specified sections from notebook"""
+    print(f"\nAnalyzing notebook: {notebook_file}")
     with open(notebook_file, 'r', encoding='utf-8') as f:
         nb = nbformat.read(f, as_version=4)
 
@@ -11,6 +12,17 @@ def extract_sections(notebook_file, sections):
     section_content = []
     in_section = False
 
+    print("\nSearching for sections:")
+    for section in sections:
+        print(f"- {section}")
+
+    print("\nFound markdown headers:")
+    for cell in nb.cells:
+        if cell.cell_type == 'markdown':
+            if re.match(r'^#+\s+', cell.source):
+                print(f"Header found: {cell.source.splitlines()[0]}")
+
+    print("\nProcessing sections...")
     for cell in nb.cells:
         if cell.cell_type == 'markdown':
             found_new_section = False
@@ -21,6 +33,7 @@ def extract_sections(notebook_file, sections):
                 if (section in cell.source or
                     re.search(rf"#+ *{re.escape(section)}", cell.source, re.IGNORECASE) or
                     re.search(rf"#+ *{section_pattern}", cell.source, re.IGNORECASE)):
+                    print(f"\nFound section: {section}")
                     if current_section and section_content:
                         extracted_cells.extend(section_content)
                     current_section = section
@@ -32,6 +45,7 @@ def extract_sections(notebook_file, sections):
             # Only check for section end if we didn't just start a new section
             if not found_new_section and in_section and re.match(r'^#+\s+\d+[\.-]', cell.source):
                 if current_section and section_content:
+                    print(f"\nEnding section: {current_section}")
                     extracted_cells.extend(section_content)
                     current_section = None
                     section_content = []
@@ -41,8 +55,10 @@ def extract_sections(notebook_file, sections):
 
     # Add the last section if it exists
     if current_section and section_content:
+        print(f"\nAdding final section: {current_section}")
         extracted_cells.extend(section_content)
 
+    print(f"\nTotal cells extracted: {len(extracted_cells)}")
     return extracted_cells
 
 def merge_sections(target_file, pipe06_file):
