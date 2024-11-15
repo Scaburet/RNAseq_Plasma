@@ -86,10 +86,33 @@ Notebooks to Analyze for R Programs and Libraries:
     - Includes dimensionality reduction (FactoMineR)
     - Complex visualization with heatmaps
 
-[ ] Pipe_11
+[x] Pipe_11
     Programs:
+    - R (>= 4.1.3)
     Libraries:
+    - ggfortify
+    - ggrepel
+    - RColorBrewer
+    - ggplot2
+    - stringr
+    - matrixStats
+    - BiocManager
+    - ggnewscale
+    - WGCNA
+    - flashClust
+    - DESeq2 (Bioconductor)
+    - org.Mm.eg.db (Bioconductor)
+    - clusterProfiler (Bioconductor)
+    - enrichplot (Bioconductor)
+    - ComplexHeatmap (Bioconductor)
+    - ReactomePA (Bioconductor)
     Notes:
+    - Most complex analysis notebook
+    - Requires multiple Bioconductor packages for pathway analysis
+    - Uses WGCNA for network analysis
+    - Includes gene set enrichment analysis
+    - Heavy dependency on mouse-specific annotation package (org.Mm.eg.db)
+    - Version compatibility critical for all Bioconductor packages
 
 Requirements:
 - Compatible with R version 4.1.3 (2022-03-10)
