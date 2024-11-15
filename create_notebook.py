@@ -38,7 +38,7 @@ This notebook guides you through the first half of the RNA-seq analysis pipeline
 <div class="alert alert-block alert-warning">
 <b>Important Data Locations:</b><br>
 - Raw fastq files: <code>/srv/data/meg-m2-rnaseq/Data/fastq/raw/</code>
-- Mouse genome annotation: <code>/srv/data/meg-m2-rnaseq/Genomes/Mmu/GRCm39/extracted/genome_annotation-M35.gtf</code>
+- Mouse genome annotation: <code>/srv/data/meg-m2-rnaseq/Genomes/Mmu/GRCm39/extracted/mouse genome_annotation-M35.gtf</code>
 - Fastp results: <code>/srv/data/meg-m2-rnaseq/Results/fastp/</code>
 
 <b>Note:</b> For efficiency, we will demonstrate the analysis on the first two samples. Commands for processing all samples are provided as silent cells.
@@ -170,7 +170,7 @@ done"""),
     nbf.v4.new_raw_cell("""# (Cell 7): STAR Genome Indexing
 # Prepare genome index
 GENOME_FASTA="${GENOME_DIR}/genome.fa"
-GENOME_GTF="${GENOME_DIR}/genome_annotation-M35.gtf"
+GENOME_GTF="${GENOME_DIR}/mouse genome_annotation-M35.gtf"  # Updated path to match requirements
 STAR_INDEX="Results/star/genome_index"
 
 mkdir -p $STAR_INDEX
