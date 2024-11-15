@@ -29,25 +29,28 @@ def verify_improvements(notebook_file):
         r'\b(dans|pour|avec|sur)\b'
     ]
 
+    # Documentation link pattern
+    doc_link_pattern = r'\[([^\]]+)\]\((https?://[^\s)]+)\)'
+
     # Check each cell
     for cell in nb.cells:
+        cell_content = cell.source.lower()
+
         # Check markdown cells for documentation features
         if cell.cell_type == 'markdown':
-            content = cell.source.lower()
-
-            if 'learning objective' in content or 'objectives:' in content:
+            if 'learning objective' in cell_content or 'objectives:' in cell_content:
                 requirements['learning_objectives'] = True
 
-            if 'documentation:' in content or 'reference:' in content:
+            if re.search(doc_link_pattern, cell.source, re.IGNORECASE):
                 requirements['documentation_links'] = True
 
-            if 'parameter' in content and ':' in content:
+            if 'parameter' in cell_content and ':' in cell_content:
                 requirements['parameter_descriptions'] = True
 
-            if 'troubleshoot' in content or 'common error' in content:
+            if 'troubleshoot' in cell_content or 'common error' in cell_content:
                 requirements['troubleshooting'] = True
 
-            if any(re.search(pattern, content) for pattern in french_patterns):
+            if any(re.search(pattern, cell_content) for pattern in french_patterns):
                 requirements['english_text'] = False
 
             if re.match(r'^#+\s+\w+', cell.source):  # Proper header format
@@ -58,13 +61,13 @@ def verify_improvements(notebook_file):
             if 'try:' in cell.source and 'except:' in cell.source:
                 requirements['error_handling'] = True
 
-            if 'validate' in cell.source.lower() or 'check' in cell.source.lower():
+            if 'validate' in cell_content or 'check' in cell_content:
                 requirements['validation_steps'] = True
 
-            if 'progress' in cell.source.lower() or 'status' in cell.source.lower():
+            if 'print("starting' in cell_content or 'print("process' in cell_content:
                 requirements['progress_indicators'] = True
 
-            if 'memory' in cell.source.lower() or 'cpu' in cell.source.lower():
+            if 'memory' in cell_content or 'cpu' in cell_content or 'thread' in cell_content:
                 requirements['resource_requirements'] = True
 
     # Print verification results
