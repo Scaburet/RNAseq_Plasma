@@ -1,4 +1,6 @@
 name: meg_m2_rnaseq_bash
+# test fo an updated environment for the novel RNAseq pipeline on mouse data (adapted from the CEA RNAseq course)
+
 channels:
   - conda-forge
   - bioconda
