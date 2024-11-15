@@ -19,8 +19,13 @@ def verify_sections(notebook_file):
     for cell in nb.cells:
         if cell.cell_type == 'markdown':
             for section in required_sections:
-                # Check for exact match or similar section header
-                if section in cell.source or re.search(rf"#+ *{re.escape(section)}", cell.source, re.IGNORECASE):
+                # Create HTML-aware pattern
+                section_pattern = section.replace(" - ", "[ -]+").replace(".", r"\.").replace("featuresCounts", r"(?:<code>)?featuresCounts(?:</code>)?")
+                if (section in cell.source or
+                    re.search(rf"#+ *{re.escape(section)}", cell.source, re.IGNORECASE) or
+                    re.search(rf"#+ *{section_pattern}", cell.source, re.IGNORECASE) or
+                    # Handle HTML-formatted headers
+                    re.search(rf"#+ *{section.replace('featuresCounts', '<code>featuresCounts</code>')}", cell.source, re.IGNORECASE)):
                     found_sections[section] = True
 
     # Print results
